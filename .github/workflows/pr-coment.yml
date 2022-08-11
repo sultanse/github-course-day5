@@ -1,19 +1,19 @@
-name: PR commit
+name: comment weather
 
 on:
   pull_request:
     branches: ["*"]
 
 jobs:
-  commit:
+  weather:
     runs-on: ubuntu-latest
     steps:
       - env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          export body=$(curl https://api.open-meteo.com/v1/forecast\?latitude\=24.713552\&longitude\=46.675297\&current_weather\=true)
-          export currentWeather=$(echo $body | jq '.current_weather')
+          export api=$(curl https://api.open-meteo.com/v1/forecast\?latitude\=24.713552\&longitude\=46.675297\&current_weather\=true)
+          export currentWeather=$(echo $api | jq '.current_weather')
           export temperature=$(echo $currentWeather | jq '.temperature')
           export time=$(echo $currentWeather | jq '.time')
-          gh pr comment $PR_NUMBER --body "Current Weather: $temperature time: $time" --repo $GITHUB_REPOSITORY
+          gh pr comment $PR_NUMBER --body "the temperature in riyadh is: $temperatur and time: $time" --repo $GITHUB_REPOSITORY
